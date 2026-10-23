@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusConnect. — Neo-Dark AI Facility Intelligence & Campus Maintenance Platform. Powered by Google Gemini.">
+  <title>CampusConnect. — Smart Campus Maintenance</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%23FFFFFF'/><text y='.72em' x='50%' text-anchor='middle' font-size='48' font-family='sans-serif' font-weight='900' fill='%230C0D11'>CC</text></svg>">
+  
+  <!-- Zero-FOUC Theme Initializer -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('campus_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      // Default to dark neo-dark theme
+      const theme = saved ? saved : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- ════════════════════════════════════════════════════════════════════
+         SLIM ELEGANT DARK NAVIGATION BAR
+         ════════════════════════════════════════════════════════════════════ -->
+    <div class="nav-wrapper">
+      <nav class="nav">
+        <div class="nav-inner">
+          <!-- Brand Logo: Clean White Circle Glyph + High-Tracking Text with Dot -->
+          <div class="nav-brand" onclick="navigateTo('home')">
+            <div class="nav-logo-glyph">CC</div>
+            <div class="nav-brand-text">
+              <span class="nav-title">CampusConnect</span><span class="nav-title-dot">.</span>
+              <span class="nav-subtitle">Smart Maintenance</span>
+            </div>
+          </div>
+
+          <div class="nav-links">
+            <button class="nav-link active" data-page="home" onclick="navigateTo('home')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span>Home</span>
+            </button>
+            <button class="nav-link" data-page="submit" onclick="navigateTo('submit')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              <span>Report</span>
+            </button>
+            <button class="nav-link" data-page="track" onclick="navigateTo('track')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span>Track</span>
+            </button>
+            <button class="nav-link" data-page="feed" onclick="navigateTo('feed')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              <span>Feed</span>
+            </button>
+
+            <!-- User Auth Profile / Login Button in Nav -->
+            <div id="nav-user-ctrl" class="nav-user-ctrl">
+              <button class="nav-auth-login-btn" id="nav-auth-login-btn" onclick="navigateTo('auth')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                <span>Sign In / Register</span>
+              </button>
+              <div class="nav-user-profile" id="nav-user-profile" style="display:none;">
+                <span class="nav-user-badge" id="nav-user-badge"></span>
+                <button class="nav-logout-btn" onclick="authLogout()" title="Log out of account">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Active Pill Badge: Gemini 3.8 Flash (Amber Pulsing Glow) -->
+            <button class="ai-badge-btn" id="ai-status-nav-btn" onclick="openAiSettingsModal()" title="Google Gemini AI Engine Status & Settings">
+              <span class="ai-pulse-wrapper">
+                <span class="ai-pulse-ping"></span>
+                <span class="ai-pulse-dot" id="ai-status-nav-dot"></span>
+              </span>
+              <span id="ai-status-nav-text">Gemini 3.8 Flash</span>
+            </button>
+
+            <!-- Theme Toggle -->
+            <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+              <span id="theme-icon-sun">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              </span>
+              <span id="theme-icon-moon" style="display:none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         AUTHENTICATION & REGISTRATION PAGE (Neo-Dark Design)
+         ════════════════════════════════════════════════════════════════════ -->
+    <div id="page-auth" class="page active">
+      <div class="auth-page-container">
+        <!-- Top Corners Header Bar -->
+        <header class="auth-top-bar">
+          <!-- Left Corner: Product Name & Branding -->
+          <div class="auth-brand-corner" onclick="navigateTo('auth')">
+            <div class="nav-logo-glyph">CC</div>
+            <div class="nav-brand-text">
+              <span class="nav-title">CampusConnect</span><span class="nav-title-dot">.</span>
+              <span class="nav-subtitle">Smart Maintenance</span>
+            </div>
+          </div>
+
+          <!-- Right Corner: About Us with Hover Pop-up & Theme Toggle -->
+          <div class="auth-right-corner">
+            <!-- About Us Interactive Hover Trigger -->
+            <div class="about-us-trigger-wrapper">
+              <button type="button" class="about-us-btn" id="auth-about-us-btn" aria-label="About Us">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>About Us</span>
+                <span class="about-us-badge">4 Founders</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13" class="about-us-chevron">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <!-- Hover Pop-Up Modal Card -->
+              <div class="about-us-popup" id="auth-about-us-popup">
+                <div class="tech-dot-corner top-left"></div>
+                <div class="tech-dot-corner bottom-right"></div>
+
+                <div class="about-popup-header">
+                  <div class="about-school-pill">
+                    <span class="pulse-amber-dot"></span>
+                    Zenith School of AI
+                  </div>
+                  <h3 class="about-popup-title">Meet the Founders<span class="heading-period">.</span></h3>
+                  <p class="about-popup-sub">
+                    Built by <strong>4 18-year-old innovators</strong> studying at <strong>Zenith School of AI</strong>, engineering the next era of autonomous campus facility dispatch.
+                  </p>
+                </div>
+
+                <div class="about-founders-grid">
+                  <!-- Shiv -->
+                  <div class="founder-card">
+                    <div class="founder-avatar-circle">
+                      <span>S</span>
+                      <span class="founder-age-tag">18y</span>
+                    </div>
+                    <div class="founder-info">
+                      <div class="founder-name">Shiv</div>
+                      <div class="founder-role">AI Architecture & Frontend Systems</div>
+                      <div class="founder-school">Zenith School of AI</div>
+                    </div>
+                  </div>
+
+                  <!-- Devang -->
+                  <div class="founder-card">
+                    <div class="founder-avatar-circle">
+                      <span>D</span>
+                      <span class="founder-age-tag">18y</span>
+                    </div>
+                    <div class="founder-info">
+                      <div class="founder-name">Devang</div>
+                      <div class="founder-role">Fullstack Logic & Pipeline Engine</div>
+                      <div class="founder-school">Zenith School of AI</div>
+                    </div>
+                  </div>
+
+                  <!-- Surya -->
+                  <div class="founder-card">
+                    <div class="founder-avatar-circle">
+                      <span>S</span>
+                      <span class="founder-age-tag">18y</span>
+                    </div>
+                    <div class="founder-info">
+                      <div class="founder-name">Surya</div>
+                      <div class="founder-role">Facility Intelligence & UX Systems</div>
+                      <div class="founder-school">Zenith School of AI</div>
+                    </div>
+                  </div>
+
+                  <!-- Mehul -->
+                  <div class="founder-card">
+                    <div class="founder-avatar-circle">
+                      <span>M</span>
+                      <span class="founder-age-tag">18y</span>
+                    </div>
+                    <div class="founder-info">
+                      <div class="founder-name">Mehul</div>
+                      <div class="founder-role">Database Systems & AI Dispatch</div>
+                      <div class="founder-school">Zenith School of AI</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="about-popup-footer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="color:var(--accent-amber);">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span>Student-Led AI Innovation • Zenith School of AI Cohort '26</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Theme Toggle Button on Auth Page -->
+            <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Middle of Page: Registration & Login Card -->
+        <div class="auth-center-stage">
+          <div class="auth-card">
+            <!-- Decorative Tech Dots -->
+            <div class="tech-dot-corner top-left"></div>
+            <div class="tech-dot-corner bottom-right"></div>
+
+            <!-- Card Top Bar: Two Micro-Pills on Left Top ("Staff" and "Students") & Mode Tabs on Right -->
+            <div class="auth-card-top-bar">
+              <!-- Left Top: Micro-Pills (Ultra Small as specified) -->
+              <div class="auth-micro-role-pills" title="Select your role">
+                <button type="button" class="auth-micro-pill active" id="pill-role-student" onclick="setAuthRole('student')">
+                  <span class="micro-indicator"></span>Students
+                </button>
+                <button type="button" class="auth-micro-pill" id="pill-role-staff" onclick="setAuthRole('staff')">
+                  <span class="micro-indicator"></span>Staff
+                </button>
+              </div>
+
+              <!-- Right Top: Switch between Register & Sign In -->
+              <div class="auth-mode-switch">
+                <button type="button" class="auth-mode-tab active" id="tab-mode-register" onclick="setAuthMode('register')">Register</button>
+                <button type="button" class="auth-mode-tab" id="tab-mode-login" onclick="setAuthMode('login')">Sign In</button>
+              </div>
+            </div>
+
+            <!-- Card Heading & Description -->
+            <div class="auth-card-heading">
+              <div class="auth-role-tag" id="auth-role-tag">STUDENT PORTAL</div>
+              <h2 id="auth-title">Student Registration<span class="heading-period">.</span></h2>
+              <p id="auth-subtitle">Create an account to submit complaints, upvote campus fixes, and track repairs live.</p>
+            </div>
+
+            <!-- Auth Form -->
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+              <!-- Name (Register Mode only) -->
+              <div class="form-group" id="auth-group-name">
+                <label class="form-label" for="auth-name">Full Name <span class="required">*</span></label>
+                <div class="auth-input-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" class="auth-input-icon"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input type="text" class="form-input auth-input" id="auth-name" placeholder="e.g. Priya Sharma" autocomplete="name">
+                </div>
+              </div>
+
+              <!-- Email (Always required) -->
+              <div class="form-group" id="auth-group-email">
+                <label class="form-label" for="auth-email">Email Address <span class="required">*</span></label>
+                <div class="auth-input-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" class="auth-input-icon"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <input type="email" class="form-input auth-input" id="auth-email" placeholder="e.g. priya@campus.edu" required autocomplete="email">
+                </div>
+              </div>
+
+              <!-- Student Specific: Department / Major & Phone (Register Mode only) -->
+              <div id="auth-student-extra-fields">
+                <div class="form-grid" style="margin-bottom: var(--space-3);">
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" for="auth-student-dept">Major / Department</label>
+                    <input type="text" class="form-input auth-input" id="auth-student-dept" placeholder="e.g. Computer Science & AI">
+                  </div>
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" for="auth-student-phone">Phone (Optional)</label>
+                    <input type="tel" class="form-input auth-input" id="auth-student-phone" placeholder="e.g. 9876543210">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Staff Specific: Department & Role (Register Mode only) -->
+              <div id="auth-staff-extra-fields" style="display:none;">
+                <div class="form-grid" style="margin-bottom: var(--space-3);">
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" for="auth-staff-dept">Department <span class="required">*</span></label>
+                    <select class="form-select auth-input" id="auth-staff-dept">
+                      <option value="General Maintenance">General Maintenance</option>
+                      <option value="Electrical & Lighting">Electrical & Lighting</option>
+                      <option value="Plumbing & Water">Plumbing & Water</option>
+                      <option value="HVAC & Climate Control">HVAC & Climate Control</option>
+                      <option value="Housekeeping & Sanitation">Housekeeping & Sanitation</option>
+                      <option value="IT & Network Services">IT & Network Services</option>
+                      <option value="Safety & Security">Safety & Security</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" for="auth-staff-role">Role / Position</label>
+                    <select class="form-select auth-input" id="auth-staff-role">
+                      <option value="staff">Staff Technician</option>
+                      <option value="supervisor">Supervisor</option>
+                      <option value="admin">Administrator</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Password (Always required) -->
+              <div class="form-group" id="auth-group-password">
+                <label class="form-label" for="auth-password">Password <span class="required">*</span></label>
+                <div class="auth-input-wrapper">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" class="auth-input-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <input type="password" class="form-input auth-input" id="auth-password" placeholder="Enter password (min 4 chars)" required autocomplete="current-password">
+                  <button type="button" class="auth-toggle-pwd" onclick="toggleAuthPassword()" title="Toggle visibility">👁️</button>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" class="btn btn-amber-pill btn-lg auth-submit-btn" id="auth-submit-btn">
+                <span id="auth-submit-text">Complete Student Registration.</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+            </form>
+
+            <!-- 1-Click Fast Demo Testing -->
+            <div class="auth-demo-chips-box">
+              <span class="auth-demo-label">⚡ 1-Click Fast Sign In:</span>
+              <div class="auth-demo-chips">
+                <button type="button" class="auth-demo-chip" onclick="quickFillAuth('student', 'student@campus.edu', 'student123')">
+                  🎓 Student (Priya)
+                </button>
+                <button type="button" class="auth-demo-chip" onclick="quickFillAuth('staff', 'admin@campus.edu', 'admin123')">
+                  🛠️ Staff Admin
+                </button>
+                <button type="button" class="auth-demo-chip" onclick="quickFillAuth('staff', 'sarah.c@campus.edu', 'staff123')">
+                  ⚡ Staff Electrician
+                </button>
+              </div>
+            </div>
+
+            <!-- Footer switch note -->
+            <div class="auth-card-footer-note" id="auth-footer-note">
+              <span>Already registered?</span>
+              <button type="button" class="auth-link-btn" onclick="setAuthMode('login')">Sign In instead</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         HERO LANDING (Home - Student Portal)
+         ════════════════════════════════════════════════════════════════════ -->
+    <div id="page-home" class="page">
+      <div class="hero">
+        <!-- Decorative Dot Matrix Corner -->
+        <div class="tech-dot-corner top-left"></div>
+        <div class="tech-dot-corner bottom-right"></div>
+
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Next-Gen AI Facility Intelligence • Gemini 3.8 Flash<span class="heading-period">.</span>
+        </div>
+        <h1>Resolve<span class="heading-period">.</span><br><span class="gradient-text">Smart Campus.</span></h1>
+        <p>Turn campus complaints into trackable action with real-time Gemini AI dispatch. Report maintenance issues naturally in your own words.</p>
+        
+        <div class="hero-actions">
+          <!-- Primary: Solid vibrant electric yellow pill -->
+          <button class="btn btn-amber-pill btn-lg" onclick="navigateTo('submit')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            Report an Issue.
+          </button>
+          <!-- Secondary: Sleek dark outline pill -->
+          <button class="btn btn-dark-pill btn-lg" onclick="navigateTo('feed')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            Campus Feed.
+          </button>
+          <button class="btn btn-ghost btn-lg" onclick="navigateTo('track')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            Track Ticket.
+          </button>
+        </div>
+      </div>
+
+      <!-- Bento Feature Cards (Frosted Dark Glass + Amber Accents) -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="feature-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          </div>
+          <h3>AI-Powered Analysis<span class="heading-period">.</span></h3>
+          <p>Gemini AI understands informal slang, extracts root issues, generates structured summaries, and requests missing details automatically.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="feature-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <h3>Photo Evidence<span class="heading-period">.</span></h3>
+          <p>Upload damaged equipment or leak photos. Multimodal AI scans the visual evidence to diagnose severity and prioritize repairs.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="feature-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+          </div>
+          <h3>Smart Routing<span class="heading-period">.</span></h3>
+          <p>Tickets are mapped to the exact facility department (Electrical, Plumbing, HVAC, IT, Security) using our institutional routing matrix.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="feature-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </div>
+          <h3>Duplicate Detection<span class="heading-period">.</span></h3>
+          <p>AI compares incoming complaints against active campus tickets to flag potential duplicates, saving staff hours of redundant work.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="feature-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <h3>Staff Command Center<span class="heading-period">.</span></h3>
+          <p>Complete facility operational dashboard to assign technicians, track KPIs, filter by urgency, and update real-time progress notes.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="feature-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+          </div>
+          <h3>Live Tracking<span class="heading-period">.</span></h3>
+          <p>Students receive a persistent ticket identifier and interactive progress pipeline from initial triage to technician resolution.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         SUBMIT COMPLAINT PAGE
+         ════════════════════════════════════════════════════════════════════ -->
+    <div id="page-submit" class="page">
+      <div class="page-header">
+        <h1>Report<span class="heading-period">.</span></h1>
+        <p>Describe the issue in your own words. Our AI handles categorization, department routing, and evidence analysis.</p>
+      </div>
+
+      <!-- Quick Demo Interactive Chips -->
+      <div class="demo-templates-bar">
+        <span class="demo-templates-label">⚡ 1-Click Samples:</span>
+        <button type="button" class="template-chip" onclick="fillDemoComplaint('fan')">⚡ Sparks & Fan (Critical)</button>
+        <button type="button" class="template-chip" onclick="fillDemoComplaint('water')">💧 Library Leak (High)</button>
+        <button type="button" class="template-chip" onclick="fillDemoComplaint('ac')">❄️ AC Breakdown (High)</button>
+        <button type="button" class="template-chip" onclick="fillDemoComplaint('wifi')">📶 Dorm WiFi Outage</button>
+        <button type="button" class="template-chip" onclick="fillDemoComplaint('lock')">🔐 Broken Door Lock</button>
+      </div>
+
+      <form id="complaint-form" enctype="multipart/form-data">
+        <!-- Reporter Info -->
+        <div class="form-section">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Reporter Information<span class="heading-period">.</span>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Full Name <span class="required">*</span></label>
+              <input type="text" class="form-input" id="student_name" name="student_name" placeholder="e.g. Priya Sharma" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address <span class="required">*</span></label>
+              <input type="email" class="form-input" id="student_email" name="student_email" placeholder="e.g. priya@university.edu" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number (Optional)</label>
+              <input type="tel" class="form-input" id="student_phone" name="student_phone" placeholder="e.g. 9876543210">
+            </div>
+          </div>
+        </div>
+
+        <!-- Location Details -->
+        <div class="form-section">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            Location Details<span class="heading-period">.</span>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Location Description <span class="required">*</span></label>
+              <input type="text" class="form-input" id="location" name="location" placeholder="e.g. Science Building, 2nd Floor, Room 204" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Building Name</label>
+              <input type="text" class="form-input" id="building" name="building" placeholder="e.g. Science Complex">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Floor</label>
+              <input type="text" class="form-input" id="floor" name="floor" placeholder="e.g. 2nd Floor">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Room / Hallway</label>
+              <input type="text" class="form-input" id="room" name="room" placeholder="e.g. Room 204">
+            </div>
+          </div>
+        </div>
+
+        <!-- Complaint Text -->
+        <div class="form-section">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Describe the Issue<span class="heading-period">.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Complaint <span class="required">*</span></label>
+            <textarea class="form-textarea" id="complaint_text" name="complaint_text" placeholder="Describe what is broken, malfunctioning, or creating a hazard. Feel free to use natural speech or informal phrasing. Mention duration and safety concerns if any." required></textarea>
+            <span class="form-help">Write naturally — our Gemini AI understands colloquial terms, multiple issues, and noisy phrasing.</span>
+          </div>
+        </div>
+
+        <!-- Blueprint / Scanner Photo Upload Zone -->
+        <div class="form-section">
+          <div class="tech-dot-corner top-right"></div>
+          <div class="form-section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Photo Evidence (AI Visual Inspection)<span class="heading-period">.</span>
+          </div>
+          <div class="photo-upload-zone" id="photo-zone">
+            <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/gif,image/webp">
+            <div class="upload-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+            <div class="upload-text"><strong>Click to select photo</strong> or drag & drop here</div>
+            <div class="upload-hint">Supports JPG, PNG, GIF, WebP — Up to 10MB</div>
+          </div>
+          <div class="photo-preview" id="photo-preview" style="display:none;">
+            <img id="photo-preview-img" src="" alt="Photo Preview">
+            <button type="button" class="photo-preview-remove" onclick="removePhoto()">✕</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-amber-pill btn-lg" id="submit-btn" style="width: 100%;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="m22 2-7 20-4-9-9-4z"/><path d="m22 2-11 11"/></svg>
+          Submit Issue — Run AI Triage.
+        </button>
+      </form>
+
+      <!-- AI Result (injected after submission) -->
+      <div id="submission-result" style="display: none;"></div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         TRACK TICKET PAGE (Command-K Style)
+         ════════════════════════════════════════════════════════════════════ -->
+    <div id="page-track" class="page">
+      <div class="page-header" style="text-align: center;">
+        <h1>Track<span class="heading-period">.</span></h1>
+        <p style="margin: 0 auto;">Enter your ticket tracking code to review real-time AI triage, technician assignments, and timeline logs.</p>
+      </div>
+
+      <!-- Command-K Search Bar -->
+      <div class="track-command-bar">
+        <svg class="search-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="track-input" placeholder="CC-261023-XXXX" style="text-transform: uppercase;">
+        <span class="kbd-badge">↵ Enter</span>
+        <button class="btn btn-amber-pill" onclick="trackTicket()" id="track-btn">
+          Track Ticket.
+        </button>
+      </div>
+
+      <!-- Quick Sample Buttons -->
+      <div class="quick-samples">
+        <span>Try Sample Tickets:</span>
+        <a href="javascript:void(0)" class="sample-ticket-link" onclick="quickTrack('CC-261023-A401')">💧 CC-261023-A401 (Leak)</a>
+        <a href="javascript:void(0)" class="sample-ticket-link" onclick="quickTrack('CC-261023-B202')">⚡ CC-261023-B202 (Sparks - Critical)</a>
+        <a href="javascript:void(0)" class="sample-ticket-link" onclick="quickTrack('CC-261023-C303')">⚠️ CC-261023-C303 (Duplicate Flag)</a>
+        <a href="javascript:void(0)" class="sample-ticket-link" onclick="quickTrack('CC-261023-F606')">✅ CC-261023-F606 (Resolved)</a>
+      </div>
+
+      <div id="track-result" class="track-result"></div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         CAMPUS ISSUES FEED & UPVOTES (Community Board)
+         ════════════════════════════════════════════════════════════════════ -->
+    <div id="page-feed" class="page">
+      <div class="page-header" style="text-align: center;">
+        <div class="hero-badge" style="margin-bottom: var(--space-3);">
+          <span class="hero-badge-dot"></span>
+          Community Board<span class="heading-period">.</span>
+        </div>
+        <h1>Campus Feed<span class="heading-period">.</span></h1>
+        <p style="margin: 0 auto;">Browse reported facility issues across campus. Upvote issues you are also experiencing to help maintenance teams prioritize widespread repairs.</p>
+      </div>
+
+      <!-- Feed Controls Toolbar -->
+      <div class="feed-controls-card">
+        <div class="feed-search-row">
+          <div class="search-box" style="flex: 1;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" class="form-input" id="feed-search" placeholder="Search issues, buildings, rooms (e.g. Library, WiFi, Fan)..." oninput="debounceFeedSearch()">
+          </div>
+          <div class="feed-filter-group">
+            <select class="form-select" id="feed-category" onchange="loadPublicFeed()" style="min-width: 170px;">
+              <option value="all">All Categories</option>
+              <option value="Electrical & Lighting">Electrical & Lighting</option>
+              <option value="Plumbing & Water">Plumbing & Water</option>
+              <option value="HVAC & Climate">HVAC & Climate</option>
+              <option value="Cleaning & Sanitation">Cleaning & Sanitation</option>
+              <option value="IT & Network">IT & Network</option>
+              <option value="Safety & Security">Safety & Security</option>
+              <option value="Grounds & Outdoor">Grounds & Outdoor</option>
+              <option value="Furniture & Equipment">Furniture & Equipment</option>
+              <option value="Structural & Building">Structural & Building</option>
+            </select>
+            <select class="form-select" id="feed-sort" onchange="loadPublicFeed()" style="min-width: 150px;">
+              <option value="trending">🔥 Most Upvoted</option>
+              <option value="newest">🕒 Recently Reported</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Category quick chips -->
+        <div class="category-chips-row" id="feed-quick-chips">
+          <button class="cat-chip active" onclick="setFeedCategory('all')">All Issues</button>
+          <button class="cat-chip" onclick="setFeedCategory('IT & Network')">📶 WiFi & IT</button>
+          <button class="cat-chip" onclick="setFeedCategory('Plumbing & Water')">💧 Plumbing</button>
+          <button class="cat-chip" onclick="setFeedCategory('Electrical & Lighting')">⚡ Electrical</button>
+          <button class="cat-chip" onclick="setFeedCategory('HVAC & Climate')">❄️ Climate / AC</button>
+          <button class="cat-chip" onclick="setFeedCategory('Safety & Security')">🛡️ Safety</button>
+          <button class="cat-chip" onclick="setFeedCategory('Cleaning & Sanitation')">🧹 Cleanliness</button>
+        </div>
+      </div>
+
+      <!-- Feed Grid -->
+      <div id="feed-container" class="feed-grid"></div>
+
+      <!-- Empty State -->
+      <div id="feed-empty" class="empty-state" style="display:none;">
+        <div class="empty-state-icon">🔍</div>
+        <h3>No matching complaints found<span class="heading-period">.</span></h3>
+        <p>No community tickets match your search criteria or selected category.</p>
+        <button class="btn btn-amber-pill" onclick="navigateTo('submit')" style="margin-top:var(--space-4);">
+          Report a New Issue.
+        </button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         STAFF DASHBOARD PAGE
+         ════════════════════════════════════════════════════════════════════ -->
+    <div id="page-dashboard" class="page">
+      <!-- Login View -->
+      <div id="staff-login" class="login-container">
+        <div class="login-card">
+          <div class="tech-dot-corner top-right"></div>
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(250, 204, 21, 0.12); color: #facc15; display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-4); border: 1px solid rgba(250, 204, 21, 0.3); box-shadow: 0 0 15px rgba(250, 204, 21, 0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h2>Staff Portal<span class="heading-period">.</span></h2>
+          <p>Sign in to manage complaints, assign tickets, and inspect duplicate flags.</p>
+          <form onsubmit="staffLogin(event)">
+            <div class="form-group" style="margin-bottom: var(--space-3);">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" id="staff-email" value="admin@campus.edu" placeholder="admin@campus.edu" required>
+            </div>
+            <div class="form-group" style="margin-bottom: var(--space-4);">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-input" id="staff-password" value="admin123" placeholder="admin123" required>
+            </div>
+            <button type="submit" class="btn btn-amber-pill btn-lg" style="width: 100%;">Sign In to Dashboard.</button>
+          </form>
+
+          <div style="margin-top:var(--space-6);padding-top:var(--space-4);border-top:1px solid var(--border-subtle);">
+            <div style="font-size:0.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:var(--space-3);letter-spacing:0.04em;">⚡ 1-Click Role Sign In:</div>
+            <div style="display:flex;gap:var(--space-2);flex-direction:column;">
+              <button type="button" class="btn btn-sm btn-secondary" style="justify-content:flex-start;" onclick="quickStaffLogin('admin@campus.edu','admin123')">
+                👑 Admin Supervisor (admin@campus.edu)
+              </button>
+              <button type="button" class="btn btn-sm btn-ghost" style="justify-content:flex-start;" onclick="quickStaffLogin('john.r@campus.edu','staff123')">
+                🔧 Maintenance Supervisor (john.r@campus.edu)
+              </button>
+              <button type="button" class="btn btn-sm btn-ghost" style="justify-content:flex-start;" onclick="quickStaffLogin('sarah.c@campus.edu','staff123')">
+                ⚡ Electrical Technician (sarah.c@campus.edu)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard View (Authenticated) -->
+      <div id="staff-dashboard" style="display: none;">
+        <div class="page-header" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+          <div>
+            <h1>Facility Operations<span class="heading-period">.</span></h1>
+            <p>Welcome back, <strong id="staff-name-display" style="color: var(--accent-amber);">Admin</strong></p>
+          </div>
+          <button class="btn btn-ghost" onclick="staffLogout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign Out.
+          </button>
+        </div>
+
+        <!-- KPIs Stats Grid -->
+        <div id="dashboard-stats" class="stats-grid"></div>
+
+        <!-- Charts Distribution -->
+        <div id="dashboard-charts" class="chart-grid"></div>
+
+        <!-- Tickets Card & Table -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">All Facility Tickets<span class="heading-period">.</span></div>
+            <button class="btn btn-sm btn-secondary" onclick="loadTickets()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              Refresh
+            </button>
+          </div>
+          <div class="card-body">
+            <!-- Triage Quick Filters -->
+            <div class="triage-pills" id="triage-pills">
+              <button class="triage-pill active" onclick="setTriageFilter('all')">All Tickets (<span id="count-all">8</span>)</button>
+              <button class="triage-pill" onclick="setTriageFilter('critical')">🚨 Critical (<span id="count-critical">2</span>)</button>
+              <button class="triage-pill" onclick="setTriageFilter('duplicates')">⚠️ Duplicate Flagged (<span id="count-dups">1</span>)</button>
+              <button class="triage-pill" onclick="setTriageFilter('in_progress')">⏳ In Progress (<span id="count-inprogress">1</span>)</button>
+              <button class="triage-pill" onclick="setTriageFilter('resolved')">✅ Resolved (<span id="count-resolved">2</span>)</button>
+            </div>
+
+            <div class="table-controls">
+              <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" class="form-input" id="ticket-search" placeholder="Filter tickets..." oninput="filterTickets()">
+              </div>
+              <div class="filter-group">
+                <select class="form-select" id="filter-status" onchange="filterTickets()" style="min-width:130px;">
+                  <option value="all">All Status</option>
+                  <option value="open">Open</option>
+                  <option value="assigned">Assigned</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="resolved">Resolved</option>
+                  <option value="closed">Closed</option>
+                  <option value="duplicate">Duplicate</option>
+                </select>
+                <select class="form-select" id="filter-priority" onchange="filterTickets()" style="min-width:130px;">
+                  <option value="">All Priority</option>
+                  <option value="critical">Critical</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="ticket-table-wrapper">
+              <table class="ticket-table">
+                <thead>
+                  <tr>
+                    <th>Ticket</th>
+                    <th>Summary</th>
+                    <th>Category</th>
+                    <th>Department</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                  </tr>
+                </thead>
+                <tbody id="tickets-tbody"></tbody>
+              </table>
+            </div>
+
+            <div id="tickets-empty" class="empty-state" style="display:none;">
+              <div class="empty-state-icon">📭</div>
+              <h3>No tickets found<span class="heading-period">.</span></h3>
+              <p>No maintenance tickets match your current filters.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         TICKET DETAIL MODAL
+         ════════════════════════════════════════════════════════════════════ -->
+    <div id="ticket-modal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-header">
+          <div>
+            <div class="card-title" id="modal-ticket-number"></div>
+            <div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;" id="modal-ticket-date"></div>
+          </div>
+          <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body" id="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════════
+         AI SETTINGS & STATUS MODAL
+         ════════════════════════════════════════════════════════════════════ -->
+    <div id="ai-settings-modal" class="modal-overlay" onclick="if(event.target===this)closeAiSettingsModal()">
+      <div class="modal" style="max-width: 520px;">
+        <div class="modal-header">
+          <div>
+            <div class="card-title">Google Gemini 3.8 Flash<span class="heading-period">.</span></div>
+            <div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">AI Assistant & Facility Intelligence</div>
+          </div>
+          <button class="modal-close" onclick="closeAiSettingsModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="ai-status-card">
+            <div class="status-indicator-row">
+              <span class="status-dot-large" id="modal-ai-dot"></span>
+              <div>
+                <div style="font-weight:700;font-size:0.95rem;color:#ffffff;" id="modal-ai-title">Google Gemini 3.8 Flash</div>
+                <div style="font-size:0.8rem;color:var(--text-muted);" id="modal-ai-desc">Active — analyzing complaints, photos & detecting duplicates</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:var(--surface-muted);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:var(--space-3);margin-bottom:var(--space-4);font-size:0.8rem;color:var(--text-secondary);line-height:1.6;">
+            <div style="font-weight:700;color:#ffffff;margin-bottom:4px;">✨ Capabilities Enabled:</div>
+            • Natural language complaint comprehension & slang resolution<br>
+            • Automatic structured summary generation & severity classification<br>
+            • Intelligent category & department dispatch using routing matrix<br>
+            • Missing details detection (floor, room, duration, safety risks)<br>
+            • Semantic duplicate ticket comparison with confidence metrics
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Google AI Studio API Key</label>
+            <div style="display:flex;gap:var(--space-2);">
+              <input type="password" class="form-input" id="settings-api-key" placeholder="Enter key (starts with AIzaSy... or AQ...)">
+              <button type="button" class="btn btn-secondary" onclick="toggleKeyVisibility()">👁️</button>
+            </div>
+            <span class="form-help">Current Key: <strong id="settings-masked-key">Configured</strong></span>
+          </div>
+
+          <div style="display:flex;gap:var(--space-3);">
+            <button class="btn btn-amber-pill" onclick="saveApiKey()">Save & Apply Key.</button>
+            <button class="btn btn-secondary" onclick="testApiKey()">Test Connection.</button>
+          </div>
+          <div id="api-key-test-result" style="margin-top:var(--space-3);display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
